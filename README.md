@@ -1,4 +1,4 @@
-# 🚢 Titanic Survival Prediction – Complete Project Summary (6 Models)
+# 🚢 Titanic Survival Prediction 
 
 ## 📌 Overview
 This project implements a full end‑to‑end machine learning pipeline for predicting passenger survival on the Titanic. We compare **six different classification algorithms**, perform extensive feature engineering, hyperparameter tuning with cross‑validation, and select the best model for deployment.
@@ -57,18 +57,17 @@ Each model was tuned using `GridSearchCV` with 5‑fold cross‑validation on th
 
 ## 📊 Results Comparison
 
-*Note: The table below contains example results. Please replace with your actual outputs after running the complete code.*
 
-| Model | Test Accuracy | Test Precision | Test Recall | Test F1 | CV Accuracy (5‑fold) |
-|-------|---------------|----------------|-------------|---------|----------------------|
-| Logistic Regression | 0.810 | 0.786 | 0.743 | 0.764 | 0.824 ± 0.015 |
-| Random Forest | 0.816 | 0.797 | 0.743 | 0.769 | 0.834 ± 0.024 |
-| KNN | 0.732 | 0.691 | 0.635 | 0.662 | 0.806 ± 0.024 |
-| Gradient Boosting | *0.821* | *0.802* | *0.751* | *0.776* | *0.838 ± 0.022* |
-| SVM (RBF) | *0.815* | *0.789* | *0.747* | *0.767* | *0.831 ± 0.018* |
-| MLP Neural Network | *0.804* | *0.775* | *0.738* | *0.756* | *0.822 ± 0.026* |
 
-*(Values in *italic* are typical expectations; actual results may vary.)*
+| Model |	Test Accuracy |	Precision |	Recall |	F1 Score |	CV Accuracy (5‑fold) |
+|-------|---------------|-----------|--------|----------|----------------------|
+| Gradient Boosting	| 0.821	| 0.800 |	0.757 |	0.778 |	0.830 (±0.021) |
+| Random Forest	| 0.816 |	0.797 |	0.743 |	0.769	| 0.834 (±0.024) |
+| Logistic Regression |	0.810	| 0.786 |	0.743 |	0.764 |	0.824 (±0.015) |
+| SVM (RBF) |	0.810 |	0.794 |	0.730 |	0.761	| 0.829 (±0.014) |
+| MLP Neural Network |	0.782 |	0.761 |	0.689 |	0.723 |	0.822 (±0.025) |
+| KNN |	0.732	| 0.691	| 0.635	| 0.662	| 0.806 (±0.024) |
+
 
 ---
 
@@ -90,6 +89,9 @@ In our run, **Random Forest** achieved the highest CV accuracy (**83.4%**) and t
 - **False Positives:** 14  
 - **False Negatives:** 19  
 - **True Positives:** 55  
+
+![Confusion Matrix](images/image1.png)
+
 
 The model shows good balance with slightly more false negatives than false positives.
 
