@@ -1,124 +1,130 @@
-# 🚢 Titanic Survival Prediction 
+# 🚢 Titanic Survival Prediction
 
-## 📌 Overview
-This project implements a full end‑to‑end machine learning pipeline for predicting passenger survival on the Titanic. We compare **six different classification algorithms**, perform extensive feature engineering, hyperparameter tuning with cross‑validation, and select the best model for deployment.
-
-The six models evaluated are:
-1. Logistic Regression
-2. Random Forest
-3. K‑Nearest Neighbors (KNN)
-4. Gradient Boosting
-5. Support Vector Machine (SVM) with RBF kernel
-6. Multi‑Layer Perceptron (MLP) Neural Network
+A complete end-to-end machine learning pipeline that benchmarks **six classification algorithms** on the Kaggle Titanic dataset. The project covers feature engineering, preprocessing, hyperparameter tuning with cross-validation, model comparison, and final model selection.
 
 ---
 
 ## 📂 Dataset
-- **Source:** Kaggle Titanic – Machine Learning from Disaster
-- **Training samples:** 891
-- **Features:** 12 (Age, Sex, Pclass, Fare, etc.)
-- **Target:** `Survived` (binary: 0 = No, 1 = Yes)
+
+| Property | Value |
+|---|---|
+| Source | [Kaggle – Titanic: Machine Learning from Disaster](https://www.kaggle.com/c/titanic/data) |
+| Training samples | 891 |
+| Features | 12 raw (Age, Sex, Pclass, Fare, SibSp, Parch, etc.) |
+| Target | `Survived` (0 = No, 1 = Yes) |
+
+> Download `train.csv` from Kaggle and place it in the project root before running the notebook.
 
 ---
 
 ## ⚙️ Feature Engineering
-We engineered two new features that significantly boosted model performance:
 
-- **`Title`** – extracted from passenger names (e.g., Mr, Mrs, Miss, Master, Rare). This captures age, marital status, and social class.
-- **`FamilySize`** – `SibSp + Parch + 1`. Large families had lower survival; travelling alone also impacted odds.
+Two features were engineered that provided the most significant performance gains across all models:
 
-**Dropped columns:** `PassengerId`, `Name`, `Ticket`, `Cabin`, `Embarked` (the latter showed near‑zero importance in preliminary analysis).
+- **`Title`** — extracted from passenger names (Mr, Mrs, Miss, Master, Rare). Captures social class, age group, and marital status implicitly.
+- **`FamilySize`** — computed as `SibSp + Parch + 1`. Both very large families and solo travellers showed lower survival rates.
+
+**Columns dropped:** `PassengerId`, `Name`, `Ticket`, `Cabin`, `Embarked`  
+(`Embarked` was excluded after showing near-zero feature importance in preliminary analysis.)
 
 ---
 
 ## 🧹 Preprocessing Pipeline
-A consistent pipeline was applied to all models:
 
-- **Numeric features** (`Age`, `Fare`, `SibSp`, `Parch`, `FamilySize`): imputed with median, then scaled to zero mean and unit variance.
-- **Categorical features** (`Sex`, `Title`): imputed with mode, then one‑hot encoded (drop first to avoid dummy trap).
+A unified `sklearn` pipeline was applied consistently across all six models before training:
 
-The data was split into **80% training** and **20% test** with stratification.
+| Feature Type | Imputation | Scaling / Encoding |
+|---|---|---|
+| Numeric (`Age`, `Fare`, `SibSp`, `Parch`, `FamilySize`) | Median | StandardScaler (zero mean, unit variance) |
+| Categorical (`Sex`, `Title`) | Mode | One-Hot Encoding (drop first to avoid dummy trap) |
+
+Data split: **80% train / 20% test** with stratification on the target variable.
 
 ---
 
-## 🤖 Model Training & Hyperparameter Tuning
-Each model was tuned using `GridSearchCV` with 5‑fold cross‑validation on the training set. The optimal hyperparameters found are listed below:
+## 🤖 Models & Hyperparameter Tuning
+
+Each model was tuned using `GridSearchCV` with **5-fold cross-validation** on the training set.
 
 | Model | Best Hyperparameters |
-|-------|----------------------|
+|---|---|
 | Logistic Regression | `C = 10` |
 | Random Forest | `n_estimators = 150`, `max_depth = 6`, `min_samples_split = 5` |
 | KNN | `n_neighbors = 3` |
 | Gradient Boosting | `learning_rate = 0.1`, `max_depth = 3`, `n_estimators = 100` |
-| SVM (RBF) | `C = 10`, `gamma = 'scale'` |
-| MLP Neural Network | `alpha = 0.001`, `hidden_layer_sizes = (50,)`, `learning_rate_init = 0.01` |
+| SVM (RBF kernel) | `C = 10`, `gamma = 'scale'` |
+| MLP Neural Network | `hidden_layer_sizes = (50,)`, `alpha = 0.001`, `learning_rate_init = 0.01` |
 
 ---
 
-## 📊 Results Comparison
+## 📊 Results
 
+Models ranked by test accuracy:
 
-
-| Model |	Test Accuracy |	Precision |	Recall |	F1 Score |	CV Accuracy (5‑fold) |
-|-------|---------------|-----------|--------|----------|----------------------|
-| Gradient Boosting	| 0.821	| 0.800 |	0.757 |	0.778 |	0.830 (±0.021) |
-| Random Forest	| 0.816 |	0.797 |	0.743 |	0.769	| 0.834 (±0.024) |
-| Logistic Regression |	0.810	| 0.786 |	0.743 |	0.764 |	0.824 (±0.015) |
-| SVM (RBF) |	0.810 |	0.794 |	0.730 |	0.761	| 0.829 (±0.014) |
-| MLP Neural Network |	0.782 |	0.761 |	0.689 |	0.723 |	0.822 (±0.025) |
-| KNN |	0.732	| 0.691	| 0.635	| 0.662	| 0.806 (±0.024) |
-
-
----
-
-## 🏆 Best Model Selection
-
-Based on the highest cross‑validation accuracy, **Gradient Boosting** (or possibly Random Forest) emerges as the best performer. However, the difference between the top models is often marginal, and the choice may depend on interpretability or inference speed.
-
-In our run, **Random Forest** achieved the highest CV accuracy (**83.4%**) and test accuracy (**81.6%**). We therefore select it as the final model for deployment.
+| Model | Test Accuracy | Precision | Recall | F1 Score | CV Accuracy (5-fold) |
+|---|---|---|---|---|---|
+| Gradient Boosting | **0.821** | 0.800 | 0.757 | 0.778 | 0.830 ± 0.021 |
+| Random Forest | 0.816 | 0.797 | 0.743 | 0.769 | **0.834 ± 0.024** |
+| Logistic Regression | 0.810 | 0.786 | 0.743 | 0.764 | 0.824 ± 0.015 |
+| SVM (RBF) | 0.810 | 0.794 | 0.730 | 0.761 | 0.829 ± 0.014 |
+| MLP Neural Network | 0.782 | 0.761 | 0.689 | 0.723 | 0.822 ± 0.025 |
+| KNN | 0.732 | 0.691 | 0.635 | 0.662 | 0.806 ± 0.024 |
 
 ---
 
-## 📈 Confusion Matrix – Random Forest (Example)
+## 🏆 Best Model: Random Forest
+
+**Random Forest** was selected as the final model based on the highest 5-fold CV accuracy (**83.4%**), which is the more reliable indicator of generalisation than a single test-set score. Gradient Boosting edges it out on raw test accuracy (82.1% vs 81.6%), but the difference is within the margin of variance, and Random Forest offers better interpretability via feature importances.
+
+### Confusion Matrix — Random Forest
 
 ```
-[[91 14]
- [19 55]]
+              Predicted: 0    Predicted: 1
+Actual: 0         91              14
+Actual: 1         19              55
 ```
-- **True Negatives:** 91  
+
+- **True Negatives (correctly predicted not survived):** 91  
+- **True Positives (correctly predicted survived):** 55  
 - **False Positives:** 14  
 - **False Negatives:** 19  
-- **True Positives:** 55  
 
 ![Confusion Matrix](images/image1.png)
 
-
-The model shows good balance with slightly more false negatives than false positives.
-
 ---
 
-## 🧠 Final Conclusion
+## 🧠 Key Takeaways
 
-1. After evaluating six classifiers on the Titanic dataset, **Gradient Boosting** and **Random Forest** consistently outperform simpler models, thanks to their ability to capture non‑linear interactions between engineered features.
-2. Feature engineering – especially extracting `Title` – provided the most significant performance gain across all models.
-3. Logistic Regression remains a strong, interpretable baseline, achieving nearly 82% CV accuracy.
-4. KNN and MLP were less consistent; KNN is sensitive to the feature space, while MLP requires careful regularization on small datasets.
-5. For production, we recommend **Random Forest** (or Gradient Boosting) with hyperparameters tuned via cross‑validation, as it offers the best trade‑off between accuracy, robustness, and ease of deployment.
-
----
+1. **Feature engineering was the biggest lever** — extracting `Title` alone produced the most consistent accuracy improvement across all six models.
+2. **Gradient Boosting and Random Forest dominate** — their ability to capture non-linear interactions between features outpaces linear and distance-based models on this dataset.
+3. **Logistic Regression is a strong baseline** — nearly matching ensemble methods at a fraction of the complexity, making it a good sanity-check benchmark.
+4. **KNN and MLP underperformed** — KNN is sensitive to the feature space and scale; MLP requires careful regularisation and more data to generalise well.
+5. **CV accuracy is the right selection criterion** — a single 80/20 split can be lucky or unlucky; 5-fold CV gives a more honest picture of model quality.
 
 ---
 
 ## 🚀 How to Reproduce
 
-1. Clone the repository.
-2. Install dependencies: `pip install -r requirements.txt`
-3. Download `train.csv` from Kaggle and place it in the project root.
-4. Run the Jupyter notebook or Python script.
-5. All results will be printed and plots displayed.
+```bash
+# 1. Clone the repository
+git clone https://github.com/SKKammar/Titanic-Survival-Prediction.git
+cd Titanic-Survival-Prediction
+
+# 2. Install dependencies
+pip install pandas numpy scikit-learn matplotlib seaborn jupyter
+
+# 3. Download train.csv from Kaggle and place it in the project root
+# https://www.kaggle.com/c/titanic/data
+
+# 4. Launch the notebook
+jupyter notebook 3MLmodelProject.ipynb
+```
 
 ---
 
-⭐ **Star this repository if you found it useful!**  
-Happy predicting! 🎯
-```
+## 🛠️ Tech Stack
+
+![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-1.x-orange?logo=scikit-learn)
+![Pandas](https://img.shields.io/badge/Pandas-2.x-150458?logo=pandas)
+![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?logo=jupyter)
