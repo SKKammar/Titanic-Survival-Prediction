@@ -49,9 +49,9 @@ Each model was tuned using `GridSearchCV` with **5-fold cross-validation** on th
 | Model | Best Hyperparameters |
 |---|---|
 | Logistic Regression | `C = 10` |
-| Random Forest | `n_estimators = 150`, `max_depth = 6`, `min_samples_split = 5` |
-| KNN | `n_neighbors = 3` |
-| Gradient Boosting | `learning_rate = 0.05`, `max_depth = 5`, `n_estimators = 100` |
+| Random Forest | `n_estimators = 150`, `max_depth = 3`, `min_samples_split = 2` |
+| KNN | `n_neighbors = 9` |
+| Gradient Boosting | `learning_rate = 0.1`, `max_depth = 3`, `n_estimators = 100` |
 | SVM (RBF kernel) | `C = 1`, `gamma = 'scale'` |
 | MLP Neural Network | `hidden_layer_sizes = (50,)`, `alpha = 0.0001`, `learning_rate_init = 0.001` |
 
@@ -59,35 +59,35 @@ Each model was tuned using `GridSearchCV` with **5-fold cross-validation** on th
 
 ## 📊 Results
 
-Models ranked by test accuracy:
+Models ranked by 5-fold CV accuracy (the selection criterion used for the final model):
 
 | Model | Test Accuracy | Precision | Recall | F1 Score | CV Accuracy (5-fold) |
 |---|---|---|---|---|---|
-| Gradient Boosting | **0.821** | 0.800 | 0.757 | 0.778 | 0.830 ± 0.021 |
-| Random Forest | 0.816 | 0.797 | 0.743 | 0.769 | **0.834 ± 0.024** |
-| Logistic Regression | 0.810 | 0.786 | 0.743 | 0.764 | 0.824 ± 0.015 |
-| SVM (RBF) | 0.810 | 0.794 | 0.730 | 0.761 | 0.829 ± 0.014 |
-| MLP Neural Network | 0.782 | 0.761 | 0.689 | 0.723 | 0.822 ± 0.025 |
-| KNN | 0.732 | 0.691 | 0.635 | 0.662 | 0.806 ± 0.024 |
+| Gradient Boosting | 0.804 | 0.774 | 0.696 | 0.733 | **0.822 ± 0.020** |
+| SVM (RBF) | 0.827 | 0.797 | 0.739 | 0.767 | 0.820 ± 0.014 |
+| Logistic Regression | **0.838** | 0.813 | 0.754 | 0.782 | 0.819 ± 0.023 |
+| Random Forest | 0.810 | 0.787 | 0.696 | 0.738 | 0.819 ± 0.019 |
+| MLP Neural Network | 0.816 | 0.800 | 0.696 | 0.744 | 0.808 ± 0.024 |
+| KNN | 0.799 | 0.780 | 0.667 | 0.719 | 0.796 ± 0.025 |
 
 ---
 
-## 🏆 Best Model: Random Forest
+## 🏆 Best Model: Gradient Boosting
 
-**Random Forest** was selected as the final model based on the highest 5-fold CV accuracy (**83.4%**), which is the more reliable indicator of generalisation than a single test-set score. Gradient Boosting edges it out on raw test accuracy (82.1% vs 81.6%), but the difference is within the margin of variance, and Random Forest offers better interpretability via feature importances.
+**Gradient Boosting** was selected as the final model based on the highest 5-fold CV accuracy (**82.2%**), which is the more reliable indicator of generalisation than a single test-set score. Logistic Regression edges it out on raw test accuracy (83.8% vs 80.4%), but with stratified sampling, the CV scores across the top four models (Gradient Boosting, SVM, Logistic Regression, Random Forest) sit within a 0.3-point band of each other — they are effectively tied, and Gradient Boosting's slight CV edge plus its lower variance (±0.020) made it the marginal pick.
 
-### Confusion Matrix — Random Forest
+### Confusion Matrix — Gradient Boosting
 
 ```
               Predicted: 0    Predicted: 1
-Actual: 0         91              14
-Actual: 1         19              55
+Actual: 0         96              14
+Actual: 1         21              48
 ```
 
-- **True Negatives (correctly predicted not survived):** 91  
-- **True Positives (correctly predicted survived):** 55  
-- **False Positives:** 14  
-- **False Negatives:** 19  
+- **True Negatives (correctly predicted not survived):** 96
+- **True Positives (correctly predicted survived):** 48
+- **False Positives:** 14
+- **False Negatives:** 21
 
 ### Model Comparison — Test vs CV Accuracy
 
@@ -102,11 +102,11 @@ Actual: 1         19              55
 
 ## 🧠 Key Takeaways
 
-1. **[MODEL NAME] is the final choice based on 5-fold CV accuracy ([CV %]%)** — with stratified sampling preserving the true ~38/62 survival split across train and test sets, this is the most reliable generalisation estimate available here.
+1. **Gradient Boosting is the final choice based on 5-fold CV accuracy (82.2%)** — with stratified sampling preserving the true ~38/62 survival split across train and test sets, this is the most reliable generalisation estimate available here.
 2. **Feature engineering was the biggest lever** — extracting `Title` alone produced the most consistent accuracy improvement across all six models.
-3. **Random Forest and Gradient Boosting are close competitors** — the ranking between them is sensitive to split strategy (stratified vs non-stratified), which signals they're genuinely comparable on this dataset rather than one being decisively better.
-4. **KNN and MLP underperformed** — KNN is sensitive to the feature space and scale; MLP requires careful regularisation and more data to generalise well.
-5. **CV accuracy, not a single test split, is the right selection criterion** — a single 80/20 split can be lucky or unlucky; stratified 5-fold CV gives a more honest, reproducible picture of model quality.
+3. **The top four models are effectively tied** — Gradient Boosting, SVM, Logistic Regression, and Random Forest all land within a 0.3-point CV accuracy band (81.9%–82.2%), signalling that no single algorithm is decisively superior on this dataset; the ranking is sensitive to small changes like stratification.
+4. **KNN underperformed** — its best CV accuracy (79.6%) trails the rest, consistent with its known sensitivity to feature scale and the curse of dimensionality after one-hot encoding.
+5. **CV accuracy, not a single test split, is the right selection criterion** — Logistic Regression's higher test accuracy (83.8%) looked best on one split, but its CV accuracy is no better than its competitors — a reminder that single-split numbers can mislead.
 
 ---
 
