@@ -51,9 +51,9 @@ Each model was tuned using `GridSearchCV` with **5-fold cross-validation** on th
 | Logistic Regression | `C = 10` |
 | Random Forest | `n_estimators = 150`, `max_depth = 6`, `min_samples_split = 5` |
 | KNN | `n_neighbors = 3` |
-| Gradient Boosting | `learning_rate = 0.1`, `max_depth = 3`, `n_estimators = 100` |
-| SVM (RBF kernel) | `C = 10`, `gamma = 'scale'` |
-| MLP Neural Network | `hidden_layer_sizes = (50,)`, `alpha = 0.001`, `learning_rate_init = 0.01` |
+| Gradient Boosting | `learning_rate = 0.05`, `max_depth = 5`, `n_estimators = 100` |
+| SVM (RBF kernel) | `C = 1`, `gamma = 'scale'` |
+| MLP Neural Network | `hidden_layer_sizes = (50,)`, `alpha = 0.0001`, `learning_rate_init = 0.001` |
 
 ---
 
@@ -103,7 +103,7 @@ Actual: 1         19              55
 
 ---
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SKKammar/Titanic-Survival-Prediction/blob/main/TitanicSurvivalPrediction.ipynb).
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SKKammar/Titanic-Survival-Prediction/blob/main/TitanicSurvivalPrediction.ipynb)
 ## 🚀 How to Reproduce
 
 ```bash
@@ -118,7 +118,7 @@ pip install pandas numpy scikit-learn matplotlib seaborn jupyter
 # https://www.kaggle.com/c/titanic/data
 
 # 4. Launch the notebook
-jupyter notebook 3MLmodelProject.ipynb
+jupyter notebook TitanicSurvivalPrediction.ipynb
 ```
 
 ---
