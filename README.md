@@ -89,17 +89,24 @@ Actual: 1         19              55
 - **False Positives:** 14  
 - **False Negatives:** 19  
 
+### Model Comparison — Test vs CV Accuracy
+
+![Model Comparison](images/image2.png)
+<!-- TODO: replace image2.png with your exported bar chart (test accuracy vs CV accuracy, best CV model outlined) -->
+
+### Confusion Matrix — Best Model
+
 ![Confusion Matrix](images/image1.png)
 
 ---
 
 ## 🧠 Key Takeaways
 
-1. **Feature engineering was the biggest lever** — extracting `Title` alone produced the most consistent accuracy improvement across all six models.
-2. **Gradient Boosting and Random Forest dominate** — their ability to capture non-linear interactions between features outpaces linear and distance-based models on this dataset.
-3. **Logistic Regression is a strong baseline** — nearly matching ensemble methods at a fraction of the complexity, making it a good sanity-check benchmark.
+1. **[MODEL NAME] is the final choice based on 5-fold CV accuracy ([CV %]%)** — with stratified sampling preserving the true ~38/62 survival split across train and test sets, this is the most reliable generalisation estimate available here.
+2. **Feature engineering was the biggest lever** — extracting `Title` alone produced the most consistent accuracy improvement across all six models.
+3. **Random Forest and Gradient Boosting are close competitors** — the ranking between them is sensitive to split strategy (stratified vs non-stratified), which signals they're genuinely comparable on this dataset rather than one being decisively better.
 4. **KNN and MLP underperformed** — KNN is sensitive to the feature space and scale; MLP requires careful regularisation and more data to generalise well.
-5. **CV accuracy is the right selection criterion** — a single 80/20 split can be lucky or unlucky; 5-fold CV gives a more honest picture of model quality.
+5. **CV accuracy, not a single test split, is the right selection criterion** — a single 80/20 split can be lucky or unlucky; stratified 5-fold CV gives a more honest, reproducible picture of model quality.
 
 ---
 
