@@ -103,8 +103,7 @@ Actual: 1         19              55
 
 ---
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SKKammar/Titanic-Survival-Prediction/TitanicSurvivalPrediction.ipynb)
-
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SKKammar/Titanic-Survival-Prediction/blob/main/TitanicSurvivalPrediction.ipynb).
 ## 🚀 How to Reproduce
 
 ```bash
