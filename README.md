@@ -92,7 +92,6 @@ Actual: 1         21              48
 ### Model Comparison — Test vs CV Accuracy
 
 ![Model Comparison](images/ComparisonBarChart.png)
-<!-- TODO: replace image2.png with your exported bar chart (test accuracy vs CV accuracy, best CV model outlined) -->
 
 ### Confusion Matrix — Best Model
 
